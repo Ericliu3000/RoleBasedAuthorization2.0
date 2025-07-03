@@ -1,0 +1,28 @@
+﻿@using ContosoUniversityRBAC.Areas.Admin.Models
+ 
+<!-- Views/Shared/Components/Navigation/Default.cshtml -->
+@model IList<Menus>
+
+    @{
+        foreach (var menu in Model.Select(m => new { Name = m.Area, Url = m.Area }).Distinct())
+     {
+       
+        <li class="nav-item dropdown">
+            <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDropdown1 @menu.Name" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@menu.Name</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown1 @menu.Name">
+                @foreach (var submenu in Model.Where(m => m.Area == menu.Name).OrderBy(m => m.Order).Distinct())
+                {
+                    <a class="dropdown-item @(submenu.Isactive ? "" : "disabled")"
+                       asp-area="@menu.Name"
+                       asp-controller="@submenu.Controller"
+                       asp-action="Index">
+                        @submenu.Controller
+                    </a>
+                }
+               </div>
+        </li>
+       
+    }
+        
+    }
+ 

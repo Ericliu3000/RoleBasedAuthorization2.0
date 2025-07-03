@@ -1,0 +1,59 @@
+﻿@using System.Security.Claims
+@model IEnumerable<Claim>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">用户 Claims</div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>类型</th>
+                    <th>值</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var claim in Model)
+                {
+                    <tr>
+                        <td>@claim.Type</td>
+                        <td>@claim.Value</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">用户角色</div>
+    <div class="card-body">
+        @if (Model != null)
+        {
+            IEnumerable<string> Roles;
+            Roles = Model.Where(c => c.Type == ClaimTypes.Role)
+            .Select(c => c.Value);
+            if (Roles.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var role in Roles)
+                    {
+                        <li class="list-group-item">@role</li>
+                    }
+                </ul>
+            }
+        else
+        {
+            <p class="text-muted">该用户没有分配任何角色。</p>
+        }
+        }
+    </div>
+</div>

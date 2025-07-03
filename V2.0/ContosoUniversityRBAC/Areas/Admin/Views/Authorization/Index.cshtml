@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ContosoUniversityRBAC.Areas.Admin.Models.RouteAuthorizationInfo>
+
+@{
+    ViewData["Title"] = "Authorization Index";
+}
+
+<h1>Authorization List</h1>
+
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RoutePattern)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisplayName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HttpMethods)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AuthorizationPolicies)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AllowedRoles)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequiresAuthentication)
+            </th>
+        </tr>
+    </thead>
+    <tbody  >
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoutePattern)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DisplayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HttpMethods)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthorizationPolicies)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AllowedRoles)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequiresAuthentication)
+                </td>
+        </tr>
+}
+    </tbody>
+</table>
+

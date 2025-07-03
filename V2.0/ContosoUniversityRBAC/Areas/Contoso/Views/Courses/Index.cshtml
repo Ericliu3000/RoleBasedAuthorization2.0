@@ -1,0 +1,111 @@
+﻿@using ContosoUniversityRBAC
+@using ContosoUniversityRBAC.Areas.Contoso.Models
+@model PaginatedList<Course>
+
+@{
+    ViewData["Title"] = "Index";
+    Dictionary<string, bool> _AuthorizeAction = ViewBag.AuthorizeAction;
+
+    /*
+    var editDisabled = _AuthorizeAction["Edit"] ? "" : "disabled";
+    var deleteDisabled = _AuthorizeAction["Delete"] ? "" : "disabled";
+    var detailDisabled = _AuthorizeAction["Details"] ? "" : "disabled";
+    var createDisabled = _AuthorizeAction["Create"] ? "" : "disabled";
+    */
+    bool canCreate = _AuthorizeAction.ContainsKey("Create") && _AuthorizeAction["Create"];
+    bool canEdit = _AuthorizeAction.ContainsKey("Edit") && _AuthorizeAction["Edit"];
+    bool canDelete = _AuthorizeAction.ContainsKey("Delete") && _AuthorizeAction["Delete"];
+    bool canDetails = _AuthorizeAction.ContainsKey("Details") && _AuthorizeAction["Details"];
+}
+
+<h1>Courses List</h1>
+
+<p>
+    @if (canCreate)
+    {
+        <a asp-action="Create">Create New</a>
+    }
+    else
+    {    
+        <a>Create New</a>
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" >@Model.GetDisplayName(p =>p.Title)</a>
+
+            </th>
+            <th>
+                @Model.GetDisplayName(p => p.Credits)
+            </th>
+            <th>
+                @Model.GetDisplayName(p => p.DepartmentID)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Credits)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Department.Name)
+            </td>
+            <td>
+                    @if (canEdit)
+                    {<a asp-action="Edit" asp-route-id="@item.CourseID">Edit</a>}
+                    else
+                    {<a>Edit</a>}
+                    |
+                    @if (canDetails)
+                    {
+                        <a asp-action="Details" asp-route-id="@item.CourseID">Details</a>
+                    }
+                    else
+                    {
+
+                        <a>Details</a>
+                    }
+                    |
+                    @if (canDelete)
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.CourseID">Delete</a>
+                    }
+                    else
+                    {
+
+                        <a>Delete</a>
+                    }
+                     
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
